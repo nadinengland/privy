@@ -3,7 +3,7 @@
   "description": "Private Members for Objects in JavaScript",
   "keywords":    ["private", "members", "instance"],
   "author":      "Thomas Nadin",
-  "version":     "0.2.1",
+  "version":     "0.2.2",
   "main":        "privy.js",
   "homepage":    "http://coffeescript.org",
   "bugs":        "https://github.com/jashkenas/coffee-script/issues",
