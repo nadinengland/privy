@@ -1,5 +1,5 @@
 (function () {
-    var Privy = {}, createAccessor, createPrivates, createSealer;
+    var Privy, createSealer;
 
     createSealer = function () {
         var value, key;
@@ -12,79 +12,66 @@
                 return key;
             },
             open: function (given) {
+                var old_value = value;
+
                 if (given === key) {
-                    return value;
+                    value = undefined;
+                    return old_value;
                 }
             }
         };
     }
 
-    createAccessor = function (property) {
-        var secret = {},
-            sealer = createSealer();
+    Privy = (function () {
+        var privy, initiate;
 
-        if (property === undefined) {
-            property = "_";
-        }
+        privy = function (property) {
+            var accessor, sealer = createSealer();
 
-        // Syntactic sugar for handshake with privy function
-        function accessor(object) {
-            var proof = {};
-
-            // Verifies that the private function is who they say they are.
-            return object[property](proof, function (key) {
-                // Privy function should set access value to proof
-                if (sealer.open(key) !== proof) {
-                    throw new Error('Unauthorized access to private members.');
-                }
-
-                // We now trust the private function
-                return sealer.seal(secret);
-            });
-        }
-
-        // Make variables publicly available.
-        accessor.secret = secret;
-        accessor.sealer = sealer;
-        accessor.property = property;
-
-        return accessor;
-    };
-
-    createPrivates = function (object, accessor) {
-        var privates = {};
-
-        // Simple error handling
-        if (object === undefined || accessor === undefined) {
-            throw new Error("Must provide an object and an accessor");
-        }
-
-        // Cannot be a property that already exists
-        if (Object.prototype.hasOwnProperty.call(object, accessor.property)) {
-            throw new Error("Object already has a property " + accessor.property);
-        }
-
-        // Add the privy function
-        Object.defineProperty(object, accessor.property, {
-            value: function (proof, callback) {
-                // Clear expecting
-                var key = callback(accessor.sealer.seal(proof))
-
-                // Retrieve secret from caller
-                if (accessor.sealer.open(key) === accessor.secret) {
-                    return privates;
-                }
+            if (property === undefined) {
+                property = "_";
             }
-        });
 
-        return privates;
-    };
+            // Syntactic sugar for handshake with privy function
+            accessor = function (object) {
+                return sealer.open(object[property]());
+            };
 
-    // Define immutable propeties on the export
-    Object.defineProperties(Privy, {
-        "createAccessor": { value: createAccessor },
-        "createPrivates": { value: createPrivates }
-    });
+            // Make variables publicly available.
+            accessor.sealer = sealer;
+            accessor.property = property;
+            accessor.initiate = initiate;
+
+            return accessor;
+        };
+
+        initiate = function (object) {
+            var privates = {},
+                self = this;
+
+            // Simple error handling
+            if (object === undefined) {
+                throw new Error("Must provide an object to create privates.");
+            }
+
+            // Cannot be a property that already exists
+            if (Object.prototype.hasOwnProperty.call(object, this.property)) {
+                throw new Error("Object already has a property " + accessor.property);
+            }
+
+            // Add the privy function
+            Object.defineProperty(object, this.property, {
+                value: function () {
+                    // Send the privates through the sealer
+                    return self.sealer.seal(privates);
+                }
+            });
+
+            return privates;
+        };
+
+        return privy;
+    }());
 
     if (typeof module !== "undefined" && typeof require !== "undefined") {
         module.exports = Privy;

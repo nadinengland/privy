@@ -14,10 +14,10 @@ Members are private and should not be confused with [protected](http://stackover
 
 ```JavaScript
 var Person = (function () {
-  var p = Privy.createAccessor();
+  var p = new Privy();
 
   function Person(name, age) {
-    var privates = Privy.createPrivates(this, p);
+    var privates = p.initiate(this);
     
     privates.name = name;
     privates.age = age;
@@ -56,8 +56,8 @@ Correct use of Privy ensures that only prototype members declared in scope of th
 
 - One single property used per object.
 - One function per constructor to access private members
-- Additional operational objects such as secrets and sealers for each constructor.
-- Gaining access to the private member object takes 7 additional function calls.
+- One sealer per constructor to communcate between Privy and objects.
+- Gaining access to the private member object takes 2 additional function calls.
 - No support for prototypal inheritance _(currently)_.
 
 **Benefits:**
@@ -69,13 +69,13 @@ Correct use of Privy ensures that only prototype members declared in scope of th
 
 ## Privy API
 
-### `Privy.createAccessor([property = "_"])`
+### `Privy([property = "_"])`
 
-Creates an accessor that is intended for use with a single constructor. Passing a value for property will be used as a string for the private property store. New accessor is returned.
+Creates an accessor that is intended for use with a single constructor. Passing a value for property will be used as a string for the private property store. New `Privy` accessor is returned.
 
-### `Privy.createPrivates(object, accessor)`
+### `(Privy).initiate(object)`
 
-Creates a private store on the `object` based on the `accessor`, which by default will be `_`.
+Creates a private store on the `object` based on the `Privy` object, which by default will be `_`.
 
 Returns the newly created private member object.
 
