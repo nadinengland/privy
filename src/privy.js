@@ -81,7 +81,7 @@
         };
 
         // Return the "constructor" Privy
-        return privy;
+        return Privy;
     }());
 
     if (typeof module !== "undefined" && typeof require !== "undefined") {

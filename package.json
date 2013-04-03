@@ -1,14 +1,14 @@
 {
-  "name":        "privy",
+  "name": "privy",
   "description": "Private Members for Objects in JavaScript",
-  "keywords":    ["private", "members", "instance"],
-  "author":      "Thomas Nadin",
-  "version":     "0.2.2",
-  "main":        "privy.js",
-  "homepage":    "http://coffeescript.org",
-  "bugs":        "https://github.com/jashkenas/coffee-script/issues",
+  "keywords": ["private", "members", "instance"],
+  "version": "0.2.3",
+  "author": "Thomas Nadin",
   "repository":  {
     "type": "git",
-    "url": "git://github.com/nadinengland/privy.git"
+    "url":  "git://github.com/nadinengland/privy.git"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.5.0"
   }
 }
