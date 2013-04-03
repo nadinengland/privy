@@ -10,6 +10,8 @@ Privy aims to create truly private members for JavaScript objects that are acces
 
 Members are private and should not be confused with [protected](http://stackoverflow.com/questions/1020749/what-are-public-private-and-protected-in-object-oriented-programming).
 
+A more detailed explaination can be read on [my website](http://thomasnadin.co.uk/2013/04/03/privy-private-members.html).
+
 ## What would typically usage look like?
 
 ```JavaScript
