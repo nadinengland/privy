@@ -81,10 +81,6 @@ Creates a private store on the `object` based on the `Privy` object, which by de
 
 Returns the newly created private member object.
 
-## Compatibility
-
-Requires functionally of `Object.defineProperty` and `Object.defineProperties` [introduced in ECMAScript 5](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/defineProperty).
-
 ## Disclaimer
 
 This was a weekend project and is by no means bullet proof. Privy is an attempt to materialize some thoughts I had on JavaScript.
