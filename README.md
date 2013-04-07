@@ -60,7 +60,7 @@ Correct use of Privy ensures that only prototype members declared in scope of th
 - One function per constructor to access private members
 - One sealer per constructor to communcate between Privy and objects.
 - Gaining access to the private member object takes 2 additional function calls.
-- No support for prototypal inheritance _(currently)_.
+- Experimental support for inheritance is under analysed at the momement. Available on [inheritance branch](https://github.com/nadinengland/privy/tree/inheritance).
 
 **Benefits:**
 
