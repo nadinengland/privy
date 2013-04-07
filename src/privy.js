@@ -43,12 +43,13 @@
 
             // Syntactic sugar for handshake with Privy function
             accessor = function (object) {
-                return sealer.open(object[property]());
+                return sealer.open(object[property](accessor.key));
             };
 
             // Make variables publicly available.
             accessor.sealer = sealer;
             accessor.property = property;
+            accessor.key = {};
 
             // add the same initiate method
             accessor.initiate = initiate;
@@ -66,16 +67,51 @@
                 throw new Error("Must provide an object to create privates.");
             }
 
-            // Cannot be a property that already exists
-            if (Object.prototype.hasOwnProperty.call(object, this.property)) {
-                throw new Error("Object already has a property " + accessor.property);
+            
+            if (!Object.prototype.hasOwnProperty.call(object, accessor.property)) {
+                // Add the Privy function to the object
+                object[accessor.property] = (function () {
+                    var head, last;
+
+                    // Function to get the private's key and create privates
+                    // If fn is a function it will be added to the next store
+                    // in the chain of private functions.
+                    return function (key, fn) {
+                        var store = head;
+
+                        // if its a function, add it to the end of the chain
+                        if (typeof fn === 'function') {
+                            // Create the new store
+                            store = { key: key, fn: fn };
+
+                            if (head === undefined) {
+                                last = head = store;
+                            } else {
+                                last.next = store;
+                                last = last.next;
+                            }
+
+                            // Store created, done
+                            return;
+                        }
+
+                        while (store !== undefined) {
+                            if (store.key === key) {
+                                // Call the function returing the key
+                                return store.fn();
+                            }
+
+                            store = store.next;
+                        }
+                    };
+                }).call();
             }
 
-            // Add the Privy function to the object
-            object[accessor.property] = function () {
+            // Add a new private member object to the chain
+            object[accessor.property].call(object, accessor.key, function () {
                 // Return the key for the private through sealer
                 return accessor.sealer.seal(privates);
-            };
+            });
 
             return privates;
         };
@@ -89,4 +125,4 @@
     } else {
         window["Privy"] = Privy;
     }
-}());
+}).call();

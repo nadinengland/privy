@@ -135,5 +135,19 @@ describe('a Privy with custom property', function () {
     });
 });
 
+describe('Inheritance', function () {
+    var p_alpha = new Privy(),
+        p_beta  = new Privy();
 
+    var object = {},
+        alpha_privates = p_alpha.initiate(object),
+        beta_privates  = p_beta.initiate(object);
 
+    it('allows parent Privy function to access members', function () {
+        expect(p_alpha(object)).toBe(alpha_privates);
+    });
+
+    it('allows child Privy function to access members', function () {
+        expect(p_beta(object)).toBe(beta_privates);
+    });
+});
