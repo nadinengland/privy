@@ -1,6 +1,7 @@
 {
   "name": "privy",
   "description": "Private Members for Objects in JavaScript",
+  "main": "src/privy",
   "keywords": ["private", "members", "instance"],
   "version": "0.2.3",
   "author": "Thomas Nadin",
