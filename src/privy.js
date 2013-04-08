@@ -118,7 +118,7 @@
 
         // Return the "constructor" Privy
         return Privy;
-    }());
+    }).call();
 
     if (typeof module !== "undefined" && typeof require !== "undefined") {
         module.exports = Privy;
