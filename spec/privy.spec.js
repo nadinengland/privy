@@ -134,6 +134,3 @@ describe('a Privy with custom property', function () {
         expect(typeof object[p.property]).toBe('function');
     });
 });
-
-
-
