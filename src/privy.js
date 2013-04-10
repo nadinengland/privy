@@ -7,8 +7,13 @@
 
         // Seals `object` and returns one time key to retreive it
         sealer.seal = function (object) {
+            // Store the object
             value = object;
-            return key = {};
+            
+            // Create a new key
+            key = {};
+
+            return key;
         };
 
         // Returns the sealed object once if `given` was used to seal it
@@ -31,8 +36,11 @@
     Privy = (function () {
         var Privy, initiate;
 
+        // Privy is the exported object
+        Privy = {};
+
         // Privy is a function that will return an access for a given property.
-        Privy = function (property) {
+        Privy.create = function (property) {
             var accessor, sealer;
 
             // Default to underscore
@@ -123,6 +131,6 @@
     if (typeof module !== "undefined" && typeof require !== "undefined") {
         module.exports = Privy;
     } else {
-        window["Privy"] = Privy;
+        window.Privy = Privy;
     }
 }).call();

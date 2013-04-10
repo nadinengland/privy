@@ -16,24 +16,24 @@ A more detailed explaination can be read on [my website](http://thomasnadin.co.u
 
 ```JavaScript
 var Person = (function () {
-  var p = new Privy();
-
-  function Person(name, age) {
-    var privates = p.initiate(this);
+    var p = Privy.create();
     
-    privates.name = name;
-    privates.age = age;
-  }
-
-  Person.prototype.name = function () {
-    return p(this).name;
-  };
-
-  Person.prototype.sameAge = function (other) {
-    return p(this).age === p(other).age;
-  };
-
-  return Person;
+    function Person(name, age) {
+        var privates = p.initiate(this);
+        
+        privates.name = name;
+        privates.age = age;
+    }
+    
+    Person.prototype.name = function () {
+        return p(this).name;
+    };
+    
+    Person.prototype.sameAge = function (other) {
+        return p(this).age === p(other).age;
+    };
+    
+    return Person;
 }).call();
 
 var thomas = new Person("Thomas", 22),
@@ -42,6 +42,16 @@ var thomas = new Person("Thomas", 22),
 thomas.name();           // "Thomas"
 sarah.sameAge(thomas);   // true
 thomas.name.call(sarah); // "Sarah"
+```
+
+## NPM Usage
+
+```Bash
+npm install privy
+```
+
+```JavaScript
+var Privy = require('privy');
 ```
 
 ## How does this differ from X?
@@ -71,15 +81,32 @@ Correct use of Privy ensures that only prototype members declared in scope of th
 
 ## Privy API
 
-### `Privy([property = "_"])`
+### Privy.create(property = '_')
 
-Creates an accessor that is intended for use with a single constructor. Passing a value for property will be used as a string for the private property store. New `Privy` accessor is returned.
+Creates an Privy object that is intended for use with a single constructor. `property` will be used as the property name for private member store function.
 
-### `(Privy).initiate(object)`
+```JavaScript
+p = Privy.create();            // p.property === '_'
+p = Privy.create('_privates'); // p.property === '_'
+```
 
-Creates a private store on the `object` based on the `Privy` object, which by default will be `_`.
+### Privy#initiate(object)
+
+Creates a private member store on the `object` based on the `Privy` object's `p.property`.
 
 Returns the newly created private member object.
+
+```JavaScript
+var privates = p.initiate(this); // typeof this._ === 'function'
+```
+
+### Privy#(object)
+
+Attempts to access the privates of the object; returns `undefined` if unable to do so.
+
+```JavaScript
+var privates = p(this); // === p.sealer.open(this._())
+```
 
 ## Disclaimer
 
