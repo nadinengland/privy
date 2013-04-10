@@ -5,10 +5,14 @@ describe('Privy', function () {
     it('should take the global name `Privy`', function () {
         expect(Privy).toBeDefined();
     });
+
+    it('has a create function', function () {
+        expect(typeof Privy.create).toBe('function');
+    });
 });
 
 describe('a Privy', function () {
-    var p = new Privy();
+    var p = Privy.create();
 
     it('should be able to be created', function () {
         expect(p).toBeDefined();
@@ -120,7 +124,7 @@ describe('a Privy', function () {
 
 describe('a Privy with custom property', function () {
     var custom = 'custom',
-        p = new Privy(custom);
+        p = Privy.create(custom);
 
     it('uses the custom property', function () {
         expect(p.property).toBe(custom);
