@@ -47,7 +47,7 @@ thomas.name.call(sarah); // "Sarah"
 ## NPM Usage
 
 ```Bash
-npm install privy
+$ npm install privy
 ```
 
 ```JavaScript
@@ -87,7 +87,7 @@ Creates an Privy object that is intended for use with a single constructor. `pro
 
 ```JavaScript
 p = Privy.create();            // p.property === '_'
-p = Privy.create('_privates'); // p.property === '_'
+p = Privy.create('_privates'); // p.property === '_privates'
 ```
 
 ### Privy#initiate(object)
