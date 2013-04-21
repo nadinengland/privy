@@ -1,7 +1,7 @@
-var Privy = require('./privy.js');
+var Privy = require('..');
 
 var Person = (function () {
-  var p = new Privy();
+  var p = Privy.create();
 
   function Person(name, age) {
     var privates = p.initiate(this);
