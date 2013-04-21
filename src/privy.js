@@ -1,47 +1,46 @@
 (function () {
+    'use strict';
+
     var Privy, createSealer;
 
     // Sealer factory: only holds one value
     createSealer = function () {
-        var value, key, sealer = {};
+        var value, key;
 
         // Seals `object` and returns one time key to retreive it
-        sealer.seal = function (object) {
-            // Store the object
-            value = object;
-            
-            // Create a new key
-            key = {};
+        return {
+            seal: function (object) {
+                // Store the object
+                value = object;
 
-            return key;
-        };
+                // Create a new key
+                key = {};
+                return key;
+            },
 
-        // Returns the sealed object once if `given` was used to seal it
-        sealer.open = function (given) {
-            var object = value;
+            // Returns the sealed object once if `given` was used to seal it
+            open: function (given) {
+                var object = value;
 
-            // Only give object if key is correct
-            if (given === key) {
-                // Empty the sealer
-                value = undefined;
+                // Only give object if key is correct
+                if (given === key) {
+                    // Empty the sealer
+                    value = undefined;
 
-                return object;
+                    return object;
+                }
             }
         };
-
-        return sealer;
     };
 
     // Privy IIFE, used to initate functions
     Privy = (function () {
-        var Privy, initiate;
-
         // Privy is the exported object
-        Privy = {};
+        var initiate, Privy = {};
 
         // Privy is a function that will return an access for a given property.
         Privy.create = function (property) {
-            var accessor, sealer;
+            var accessor, sealer = {};
 
             // Default to underscore
             property = property || "_";
@@ -54,12 +53,10 @@
                 return sealer.open(object[property]());
             };
 
-            // Make variables publicly available.
-            accessor.sealer = sealer;
+            // Add data to accessor
             accessor.property = property;
-
-            // add the same initiate method
             accessor.initiate = initiate;
+            accessor.sealer = sealer;
 
             return accessor;
         };
@@ -92,9 +89,9 @@
         return Privy;
     }).call();
 
-    if (typeof module !== "undefined" && typeof require !== "undefined") {
+    if (typeof module !== 'undefined' && typeof require !== 'undefined') {
         module.exports = Privy;
-    } else {
+    } else if (typeof window !== 'undefined') {
         window.Privy = Privy;
     }
 }).call();
