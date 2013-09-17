@@ -1,4 +1,7 @@
-(function () {
+if (typeof window.Privy !== 'undefined') {
+    console.error('Unable to load: another Privy already exists.');
+} else {
+    window.Privy = (function () {
     'use strict';
 
     // Sealer only holds one value at a time
@@ -70,4 +73,5 @@
 
     // Export the Privy function
     return { create: Privy };
-})
+})();
+}

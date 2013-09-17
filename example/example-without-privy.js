@@ -4,43 +4,55 @@
 // as Prototype methods are defined within scope of the sealer.
 
 var Person = (function () {
-    // Create a sealer to transmit privates
-    var sealer = {
-        seal: function (value) {
-            this.value = value;
-            return this.key = {};
-        },
-        open: function (key) {
-            var value = this.value;
-            if (this.key === key) {
-                value = undefined;
-                return value;
+
+    // Sealer only holds one value at a time
+    var sealer = (function () {
+        var key, value;
+
+        return {
+            seal: function (object) {
+                value = object;
+                return (key = {});
             }
-        }
-    };
+            
+            open: function (key) {
+                var object = value;
+
+                if (proof === key) {
+                    value = undefined;
+                    return object;
+                }
+            }
+        };
+    }());
+
+    // Convenience variables
+    var seal = sealer.seal;
+    var open = sealer.open;
+    var __hasOwnProperty = Object.prototype.hasOwnProperty;
 
     // Convenience method
     var p = function (object) {
-        sealer.open(object._());
+        return open(object._());
     };
 
+    // Object constructor
     function Person(name, age) {
         // Create the private member object
-        var privates = {};
+        var privates = {
+            name: name,
+            age: age
+        };
 
         // Define an accessor to return the sealed privates
         this._ = function () {
-            return sealer.seal(privates);
+            return seal(privates);
         };
-        
-        // Define private properties
-        privates.name = name;
-        privates.age = age;
     }
 
     // Explicit
     Person.prototype.name = function () {
-        return sealer.open(this._()).name;
+        return open(this._()).name;
     };
 
     // Convenience

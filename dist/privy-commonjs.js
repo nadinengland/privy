@@ -1,4 +1,4 @@
-(function () {
+module.exports = (function () {
     'use strict';
 
     // Sealer only holds one value at a time
@@ -70,4 +70,4 @@
 
     // Export the Privy function
     return { create: Privy };
-})
+})();

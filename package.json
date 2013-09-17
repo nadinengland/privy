@@ -3,14 +3,15 @@
   "description": "Private Members for Objects in JavaScript",
   "main": "src/privy",
   "keywords": ["private", "members", "instance"],
-  "version": "0.3.1",
+  "version": "0.4.1",
   "author": "Thomas Nadin",
   "repository":  {
     "type": "git",
     "url":  "git://github.com/nadinengland/privy.git"
   },
   "devDependencies": {
-    "jasmine-node": "~1.5.0"
+    "jasmine-node": "~1.5.0",
+    "uglify-js": "~2.4.0"
   },
   "scripts": {
     "test": "./node_modules/jasmine-node/bin/jasmine-node spec"

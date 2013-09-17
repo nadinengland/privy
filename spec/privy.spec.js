@@ -1,4 +1,4 @@
-var Privy = require('../src/privy.js');
+var Privy = require('../dist/privy-commonjs.min.js');
 
 describe('Privy', function () {
     // Not so relavent on Node.js but as a reminded when done in the browser 
@@ -26,56 +26,9 @@ describe('a Privy', function () {
         expect(p.property).toBe('_');
     });
 
-    it('has a sealer property', function () {
-        expect(p.sealer).toBeDefined();
-    });
-
-    describe('sealer', function () {
-        it('has an open method', function () {
-            expect(p.sealer.open).toBeDefined();
-            expect(typeof p.sealer.open).toBe('function');
-        });
-
-        it('has an seal method', function () {
-            expect(p.sealer.seal).toBeDefined();
-            expect(typeof p.sealer.seal).toBe('function');
-        });
-
-        it('returns undefined with an invalid key', function () {
-            expect(p.sealer.open()).not.toBeDefined();
-        });
-
-        it('returns a key when sealing an object', function () {
-            expect(p.sealer.seal({})).toBeDefined();
-        });
-
-        it('opens object with key', function () {
-            var object = {},
-                key = p.sealer.seal(object);
-
-            expect(p.sealer.open(key)).toBe(object);
-        });
-
-        it('returns undefined to same key twice', function () {
-            var key = p.sealer.seal({});
-
-            expect(p.sealer.open(key)).toBeDefined();
-            expect(p.sealer.open(key)).not.toBeDefined(); 
-        });
-
-        it('returns undefined to wrong key', function () {
-            var key = p.sealer.seal({});
-
-            expect(p.sealer.open({})).not.toBeDefined();
-        });
-
-        it('sealing two objects only opens second object', function () {
-            var first_object  = {}, first_key  = p.sealer.seal(first_object),
-                second_object = {}, second_key = p.sealer.seal(second_object);
-
-            expect(p.sealer.open(first_key)).not.toBe(first_object);
-            expect(p.sealer.open(second_key)).toBe(second_object);
-        });
+    it('has a seal function', function () {
+        expect(p.seal).toBeDefined();
+        expect(typeof p.seal).toBe('function');
     });
 
     it('has a initiate function', function () {

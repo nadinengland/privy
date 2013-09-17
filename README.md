@@ -105,8 +105,27 @@ var privates = p.initiate(this); // typeof this._ === 'function'
 Attempts to access the privates of the object; returns `undefined` if unable to do so.
 
 ```JavaScript
-var privates = p(this); // === p.sealer.open(this._())
+var privates = p(this); // equivilant to `open(seal(privates))` if `open` was in scope.
 ```
+
+## Here Be Dragons
+
+Privy ultimately relies on plain objects in JavaScript to transport the private variable closures around the code, watch out for this as some odd side effects can occure with a little bit of malicious code:
+
+```Javascript
+var thomas = new Person("thomas", 22);
+var sarah  = new Person("sarah", 22);
+
+var temp = thomas._;
+thomas._ = sarah_;
+sarah._ = temp;
+
+thomas.name() === "sarah";
+sarah.name() === "thomas";
+sarah.name.call(thomas) === "sarah";
+```
+
+Dispite its devious appearance malicious code like this can only swap out the functions effecting which closure is utilised. This isn't an exploit that Privy has introducted but instead it is a conciquence of JavaScript's mutable nature. This and other similar methods do not allow for access to the privates in any other way than defined within the constructor IIFE (i.e. through your public interface). They may be in the wrong place but they cannot be accessed.
 
 ## Disclaimer
 
