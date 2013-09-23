@@ -5,35 +5,37 @@
 
 var Person = (function () {
 
-    // Sealer only holds one value at a time
-    var sealer = (function () {
+    // Single value sealer constructor
+    function Sealer() {
         var key, value;
 
-        return {
-            seal: function (object) {
-                value = object;
-                return (key = {});
-            }
-            
-            open: function (key) {
-                var object = value;
+        this.seal = function (object) {
+            value = object;
+            key = {};
 
-                if (proof === key) {
-                    value = undefined;
-                    return object;
-                }
+            return key;
+        };
+            
+        this.open = function (proof) {
+            var object = value;
+
+            if (proof === key) {
+                value = undefined;
+                return object;
             }
         };
-    }());
+    }
+
+    // Create sealer for objects
+    var sealer = new Sealer();
 
     // Convenience variables
     var seal = sealer.seal;
     var open = sealer.open;
-    var __hasOwnProperty = Object.prototype.hasOwnProperty;
 
     // Convenience method
     var p = function (object) {
-        return open(object._());
+        return open(object.sealPrivates());
     };
 
     // Object constructor
@@ -45,14 +47,14 @@ var Person = (function () {
         };
 
         // Define an accessor to return the sealed privates
-        this._ = function () {
+        this.sealPrivates = function () {
             return seal(privates);
         };
     }
 
     // Explicit
     Person.prototype.name = function () {
-        return open(this._()).name;
+        return open(this.sealPrivates()).name;
     };
 
     // Convenience
